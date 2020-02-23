@@ -12,6 +12,7 @@ controllers  控制器 入参处理 api的入口
 datasource 数据库配置 
 models  结构体
 db  sql数据文件 postman接口文件
+docs 使用swag init 命令自动生成的文件夹
 repo 数据库的操作
 middleware 中间件 jwt实现
 route  注册路由

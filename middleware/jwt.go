@@ -1,11 +1,12 @@
 package middleware
 
 import (
-	"../models"
 	"fmt"
 	"github.com/dgrijalva/jwt-go"
 	jwtmiddleware "github.com/iris-contrib/middleware/jwt"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
+	"github.com/kataras/iris/v12/context"
+	"github.com/pppercyWang/iris-gorm-demo/models"
 	"github.com/spf13/cast"
 	"log"
 	"time"
@@ -23,9 +24,8 @@ func GetJWT() *jwtmiddleware.Middleware {
 		//加密的方式
 		SigningMethod: jwt.SigningMethodHS256,
 		//验证未通过错误处理方式
-		ErrorHandler: func(ctx iris.Context, s string) {
+		ErrorHandler: func(ctx context.Context, err error) {
 
-			fmt.Println("错误:", s)
 			result := models.Result{Code: -1, Msg: "认证失败，请重新登录认证"}
 			i, err := ctx.JSON(result)
 			if err != nil {
@@ -49,7 +49,7 @@ func GenerateToken(user models.User) string {
 	})
 	tokenString, _ := token.SignedString([]byte(JwtKey))
 	fmt.Println("签发时间：", time.Now().Unix())
-	fmt.Println("到期时间：", time.Now().Add(10 * time.Hour * time.Duration(1)).Unix())
+	fmt.Println("到期时间：", time.Now().Add(10*time.Hour*time.Duration(1)).Unix())
 	return tokenString
 }
 

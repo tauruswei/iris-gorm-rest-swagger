@@ -1,14 +1,10 @@
-
 package service
 
 import (
-	"../models"
-	"../repo"
-	"../utils"
-	"../middleware"
-	// "fmt"
-	// "github.com/spf13/cast"
-	// "log"
+	"github.com/pppercyWang/iris-gorm-demo/middleware"
+	"github.com/pppercyWang/iris-gorm-demo/models"
+	"github.com/pppercyWang/iris-gorm-demo/repo"
+	"github.com/pppercyWang/iris-gorm-demo/utils"
 )
 
 type UserService interface {
@@ -16,7 +12,6 @@ type UserService interface {
 	Save(user models.User) (result models.Result)
 }
 type userServices struct {
-
 }
 
 func NewUserServices() UserService {
@@ -27,7 +22,7 @@ var userRepo = repo.NewUserRepository()
 
 /*
 登录
- */
+*/
 func (u userServices) Login(m map[string]string) (result models.Result) {
 
 	if m["username"] == "" {
@@ -40,7 +35,7 @@ func (u userServices) Login(m map[string]string) (result models.Result) {
 		result.Msg = "请输入密码！"
 		return
 	}
-	user := userRepo.GetUserByUserNameAndPwd(m["username"],utils.GetMD5String(m["password"]))
+	user := userRepo.GetUserByUserNameAndPwd(m["username"], utils.GetMD5String(m["password"]))
 	if user.ID == 0 {
 		result.Code = -1
 		result.Msg = "用户名或密码错误!"
@@ -55,8 +50,8 @@ func (u userServices) Login(m map[string]string) (result models.Result) {
 
 /*
 保存
- */
-func (u userServices) Save(user models.User) (result models.Result){
+*/
+func (u userServices) Save(user models.User) (result models.Result) {
 	//添加
 	if user.ID == 0 {
 		agen := userRepo.GetUserByUsername(user.Username)
@@ -65,9 +60,9 @@ func (u userServices) Save(user models.User) (result models.Result){
 			return
 		}
 	}
-	code,p := userRepo.Save(user)
+	code, p := userRepo.Save(user)
 	if code == -1 {
-		result.Code = -1;
+		result.Code = -1
 		result.Msg = "保存失败"
 		return
 	}
@@ -75,4 +70,3 @@ func (u userServices) Save(user models.User) (result models.Result){
 	result.Data = p
 	return
 }
-

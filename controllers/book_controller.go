@@ -1,21 +1,22 @@
 package controllers
 
 import (
-	"../models"
-	"../service"
-	"log"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
+	"github.com/pppercyWang/iris-gorm-demo/models"
+	"github.com/pppercyWang/iris-gorm-demo/service"
 	"github.com/spf13/cast"
+	"log"
 )
 
 type BookController struct {
 	Ctx     iris.Context
 	Service service.BookService
 }
+
 func NewBookController() *BookController {
-	return &BookController{Service:service.NewBookService()}
+	return &BookController{Service: service.NewBookService()}
 }
-func (g *BookController) PostList()(result models.Result)  {
+func (g *BookController) PostList() (result models.Result) {
 	var m map[string]interface{}
 	err := g.Ctx.ReadJSON(&m)
 	if err != nil {
@@ -43,16 +44,16 @@ func (g *BookController) PostList()(result models.Result)  {
 	}
 	return g.Service.GetBookList(m)
 }
-func (g *BookController) PostSave()(result models.Result)  {
+func (g *BookController) PostSave() (result models.Result) {
 	var book models.Book
-	if err := g.Ctx.ReadJSON(&book); err != nil {  
+	if err := g.Ctx.ReadJSON(&book); err != nil {
 		log.Println(err)
 		result.Msg = "数据错误"
 		return
 	}
 	return g.Service.SaveBook(book)
 }
-func (g *BookController) PostGet()(result models.Result)  {
+func (g *BookController) PostGet() (result models.Result) {
 	var m map[string]interface{}
 	err := g.Ctx.ReadJSON(&m)
 	if err != nil {
@@ -70,7 +71,7 @@ func (g *BookController) PostGet()(result models.Result)  {
 	}
 	return g.Service.GetBook(cast.ToUint(m["id"]))
 }
-func (g *BookController) PostDel()(result models.Result)  {
+func (g *BookController) PostDel() (result models.Result) {
 	var m map[string]interface{}
 	err := g.Ctx.ReadJSON(&m)
 	if err != nil {
